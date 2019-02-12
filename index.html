@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Bug 1</title>
+        <style>
+            html { height: 100%; }
+            body { margin: 0; height: 100%; display: flex; flex-direction: column; font-family: sans-serif; background: #333; }
+            header { margin: 10px 10px 0 10px; }
+            section { flex: 1; display: flex; }
+            section div { flex: 1; background: #444; margin: 10px; }
+            section #left { margin-right: 0; }
+        </style>
+    </head>
+
+    <body>
+        <header>
+            <button id="btn1">1. Toggle timer</button>
+            <button id="btn2">2. Move webview</button>
+        </header>
+        <section>
+            <div id="left">
+                <webview id="webview" nodeintegration src="./webview.html"></webview>
+            </div>
+            <div id="right"></div>
+        </section>
+    </body>
+    <script>
+        let position = 'left';
+        const $webview = document.getElementById('webview');
+
+        document.getElementById('btn1').addEventListener('click', () => {
+            $webview.send('toggle-timer');
+        });
+
+        document.getElementById('btn2').addEventListener('click', () => {
+            if (position === 'left') {
+                $webview.remove();
+                document.getElementById('right').appendChild($webview);    
+                position = 'right';
+            } else {
+                $webview.remove();
+                document.getElementById('left').appendChild($webview);
+                position = 'left';
+            }
+        });
+    </script>
+</html>

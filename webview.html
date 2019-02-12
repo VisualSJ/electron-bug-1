@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Bug 1</title>
+        <style>
+            body { margin: 20px; font-family: sans-serif; color: #bbb; }
+        </style>
+    </head>
+
+    <body>
+        <section>
+            <span>Time:</span>
+            <span id="time">0</span>
+        </section>
+    </body>
+    <script>
+        const { ipcRenderer } = require('electron');
+
+        const $time = document.getElementById('time');
+
+        let stime = 0;
+        let ctime = 0;
+        let timer = null;
+
+        ipcRenderer.on('toggle-timer', () => {
+            if (timer) {
+                clearInterval(timer);
+                timer = null;
+                return;
+            }
+            const date = new Date();
+            stime = date.getTime();
+
+            timer = setInterval(() => {
+                const date = new Date();
+                ctime = date.getTime();
+
+                $time.innerHTML = (ctime - stime) / 100 | 0;
+            }, 100);
+        });
+    </script>
+</html>
